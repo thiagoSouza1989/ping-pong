@@ -96,13 +96,37 @@
 
         //bola
         const ball = {
-            x: 370,
-            y: 120,
+            x: 0,
+            y: 0,
             r: 20,
-            speed: 10,
+            speed: 7,
+            directionX: 1,
+            directionY: 1,
+            _calcPosition: function() {
+                // verifica se o jogador 1 fez um ponto (x > largura do campo)
+                
+                // verifica as laterais superior e inferior do campo
+                if(
+                    (this.y < 0 && this.directionY < 0) ||
+                    (this.y > field.h - this.r && this.directionY > 0)
+                ) {
+                    // rebate a bola invertendo o sinal do eixo Y
+                    this._reverseY()
+                }
+            },
+            _reverseX: function () {
+                // 1 * -1 = -1
+                // -1 * -1 = 1
+                this.directionX *= -1
+            },
+            _reverseY: function () {
+                // 1 * -1 = -1
+                // -1 * -1 = 1
+                this.directionY *= -1
+            },
             _move: function () {
-                this.x += 1 * this.speed
-                this.y += 1 * this.speed
+                this.x += this.directionX * this.speed
+                this.y += this.directionY * this.speed
             },
             draw: function (){
                 canvasCtx.fillStyle = "#ffffff"
@@ -110,6 +134,7 @@
                 canvasCtx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false)
                 canvasCtx.fill()
 
+                this._calcPosition()
                 this._move()
             }
         }
